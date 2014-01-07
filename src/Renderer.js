@@ -1,5 +1,5 @@
 
-define(['src/MapBlock'], function(MapBlock){
+define(['src/Rectangle'], function(MapBlock){
     var Renderer = function(canvas, width, height){
         var self = this;
         var ctx;
@@ -28,7 +28,7 @@ define(['src/MapBlock'], function(MapBlock){
         };
 
         this.createFooterBlock = function(y){
-            self.shapes.push(new MapBlock({
+            self.shapes.push(new Rectangle({
                 x: 0, y: y, width: width, height: height - y
             }));
         };
