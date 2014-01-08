@@ -22,7 +22,7 @@ define(['src/shapes/MapPolygon', 'src/math/GameMath'], function(MapPolygon, GMat
 
         var addMapBlock = function(x, y, tY, width){
             var newBlock = new MapPolygon({
-                x: x, y: y, tY: tY,
+                x: x, y: y, tY: y,
                 width: width,
                 bottomCutOff: BLOCKCUTOFF
             });

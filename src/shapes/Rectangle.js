@@ -5,7 +5,7 @@ define(['src/shapes/Shape'], function(Shape){
 
         var init = function(){
             Shape.call(self, opts);
-            self.name = 'block';
+            self.name = self.name || 'block';
         };
 
         this.draw = function(ctx){

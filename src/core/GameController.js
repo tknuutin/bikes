@@ -27,7 +27,7 @@ define([
                 rightArrowUp: onRightArrowUp,
             });
 
-            renderer.createFooterBlock(GameMap.BLOCKCUTOFF);
+            renderer.enableBlockCutoff(GameMap.BLOCKCUTOFF);
             bike = new Bike();
             renderer.register(bike);
             renderer.render();
@@ -37,12 +37,15 @@ define([
             console.log('started!');
         };
 
-        var startScroll = function(direction){
+        var CAMERAOFFSETX = -100;
+
+        var moveBike = function(direction){
             var intervalId;
             intervalId = setInterval(function(){
                 if ((direction === -1 && leftArrowDown) || (direction === 1 && rightArrowDown)) {
-                    bike.x += 5 * direction;
-                    renderer.render();
+                    var amount = 5 * direction;
+                    bike.x += amount;
+                    renderer.scrollHorizontallyTo(bike.x + CAMERAOFFSETX );
                 }
                 else {
                     clearInterval(intervalId);
@@ -53,7 +56,7 @@ define([
         var onLeftArrowDown = function(evt){
             // Can only scroll in one direction at a time
             if (!leftArrowDown && !rightArrowDown) {
-                startScroll(-1);
+                moveBike(-1);
             }
             leftArrowDown = true;
         };
@@ -64,7 +67,7 @@ define([
 
         var onRightArrowDown = function(evt){
             if (!rightArrowDown) {
-                startScroll(1);
+                moveBike(1);
             }
             rightArrowDown = true;
         };

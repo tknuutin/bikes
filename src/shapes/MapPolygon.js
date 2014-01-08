@@ -7,6 +7,7 @@ define(['src/shapes/Shape'], function(Shape){
         var init = function(){
             bottomCutOff = opts.bottomCutOff;
             Shape.call(self, opts);
+            self.debug = false;
             self.name = 'polygon' + self.x + '.' + self.y;
             self.tY = opts.tY;
             
@@ -19,7 +20,6 @@ define(['src/shapes/Shape'], function(Shape){
             self.points.push({
                 x: self.width, y: self.tY - self.y,
             });
-            console.log(self.points);
         };
 
         this.draw = function(ctx){
