@@ -18,7 +18,13 @@ define([
 
         var init = function(){
             page = new PageManager(container, canvas);
-            renderer = new Renderer(page.getCanvas(), page.getCanvasWidth(), page.getCanvasHeight());
+            renderer = new Renderer({
+                canvas: page.getCanvas(),
+                width: page.getCanvasWidth(),
+                height: page.getCanvasHeight(),
+                onScroll: onScroll,
+            });
+
             gameMap = new GameMap(500, renderer);
             input = new InputTracker({
                 leftArrowDown: onLeftArrowDown,
@@ -31,6 +37,10 @@ define([
             bike = new Bike();
             renderer.register(bike);
             renderer.render();
+        };
+
+        var onScroll = function(cameraX){
+            gameMap.onScroll(cameraX);
         };
 
         this.start = function(){

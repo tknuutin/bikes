@@ -1,7 +1,13 @@
 
 define(['src/shapes/Rectangle'], function(Rectangle){
-    var Renderer = function(canvas, width, height){
+    var Renderer = function(opts){
         var self = this;
+        var opts = opts || {};
+
+        var width = opts.width;
+        var height = opts.height;
+        var canvas = opts.canvas;
+
         var ctx;
         var renderCalled = false;
         var cameraPos = {
@@ -85,7 +91,6 @@ define(['src/shapes/Rectangle'], function(Rectangle){
         };
 
         var fillEmptySpace = function(){
-            
             if (self.fillAfter !== undefined) {
                 ctx.save();
                 ctx.fillStyle = '#CED9D5';
@@ -94,11 +99,19 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
+        this.registerMapGen = function(mapgen){
+            self.mapgen = mapgen;
+        };
+
         this.enableBlockCutoff = function(y){
             self.fillAfter = y;
         };
 
         this.scrollHorizontallyTo = function(x){
+            if (opts.onScroll) {
+                opts.onScroll(x);
+            }
+
             cameraPos.x = x;
             self.render();
         };

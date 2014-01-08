@@ -1,33 +1,44 @@
 
-define(['src/shapes/MapPolygon', 'src/math/GameMath'], function(MapPolygon, GMath){
+define([
+    'src/core/MapGenerator',
+    ], function(MapGenerator){
     var BLOCKCUTOFF = 350;
-    var BLOCKAVGWIDTH = 50;
+    var BLOCKAVGWIDTH = 70;
 
     var GameMap = function(mapWidth, renderer){
         var self = this;
 
         var init = function(){
             self.blocks = [];
+            self.mapgen = new MapGenerator({
+                blockCutOff: BLOCKCUTOFF,
+                blockAvgWidth: BLOCKAVGWIDTH,
+            });
+            renderer.registerMapGen(self.mapgen);
 
-            var pos = 0;
-            var lastY = 200;
-            while (pos < mapWidth) {
-                var newWidth = GMath.randInt(BLOCKAVGWIDTH - 25, BLOCKAVGWIDTH + 25);
-                var newY = GMath.randInt(200 - 50, 200 + 50);
-                addMapBlock(pos, lastY, newY, newWidth);
-                lastY = newY;
-                pos += newWidth;
+            while (self.mapgen.pos < mapWidth) {
+                addBlock();
             }
         };
 
-        var addMapBlock = function(x, y, tY, width){
-            var newBlock = new MapPolygon({
-                x: x, y: y, tY: tY,
-                width: width,
-                bottomCutOff: BLOCKCUTOFF
-            });
+        var addBlock = function(){
+            var newBlock = self.mapgen.generateBlock();
             self.blocks.push(newBlock);
             renderer.register(newBlock);
+        };
+
+        var needMoreBlocks = function(cameraX){
+            return cameraX + mapWidth >= self.mapgen.pos - 100;
+        };
+
+        self.onScroll = function(cameraX){
+            var need = needMoreBlocks(cameraX);
+            while (need) {
+                for (var i = 0, len = 5; i < len; i++) {
+                    addBlock();
+                }
+                need = needMoreBlocks(cameraX);
+            }
         };
 
         init();
