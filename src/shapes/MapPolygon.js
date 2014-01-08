@@ -1,5 +1,5 @@
 
-define(['src/Shape'], function(Shape){
+define(['src/shapes/Shape'], function(Shape){
     var MapPolygon = function(opts){
         var self = this;
         var bottomCutOff;
@@ -8,6 +8,7 @@ define(['src/Shape'], function(Shape){
             bottomCutOff = opts.bottomCutOff;
             Shape.call(self, opts);
             self.name = 'polygon' + self.x + '.' + self.y;
+            self.tY = opts.tY;
             
             self.points = [];
 
@@ -16,8 +17,9 @@ define(['src/Shape'], function(Shape){
                 x: 0, y: 0,
             });
             self.points.push({
-                x: self.width, y: 0,
+                x: self.width, y: self.tY - self.y,
             });
+            console.log(self.points);
         };
 
         this.draw = function(ctx){

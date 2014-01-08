@@ -1,13 +1,13 @@
 
-define(['src/Shape', 'src/Circle'], function(Shape, Circle){
+define(['src/shapes/Shape', 'src/shapes/Circle', 'src/shapes/Rectangle'], function(Shape, Circle, Rectangle){
     var Bike = function(opts){
         var self = this;
         opts = opts || {};
 
         var init = function(){
 
-            opts.x = 40;
-            opts.y = 10;
+            opts.x = 220;
+            opts.y = 150;
 
             Shape.call(self, opts);
 
@@ -21,9 +21,13 @@ define(['src/Shape', 'src/Circle'], function(Shape, Circle){
                 x: 30, y: 10
             });
 
-            self.bikeBody = 
+            self.bikeBody = new Rectangle({
+                x: -10, y: 15,
+                width: 60, height: 10,
+                fillStyle: '#000'
+            })
 
-            self.shapes = [self.leftTire, self.rightTire]
+            self.shapes = [self.leftTire, self.rightTire, self.bikeBody]
         };
 
         this.draw = function(ctx){

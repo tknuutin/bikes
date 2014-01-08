@@ -1,6 +1,6 @@
 
 window.onload = function(){
-    require(['src/GameController'], function(GameController){
+    require(['src/core/GameController'], function(GameController){
         var canvas = document.getElementById('canvas');
         var container = document.getElementById('container');
 

@@ -20,6 +20,11 @@ define([], function(){
             ctx.restore();
         };
 
+        this.setPos = function(x, y){
+            self.x = x;
+            self.y = y;
+        };
+
         init();
     };
 

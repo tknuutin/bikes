@@ -1,5 +1,5 @@
 
-define(['src/MapPolygon'], function(MapPolygon){
+define(['src/shapes/MapPolygon', 'src/math/GameMath'], function(MapPolygon, GMath){
     var BLOCKCUTOFF = 350;
     var BLOCKAVGWIDTH = 50;
 
@@ -7,20 +7,23 @@ define(['src/MapPolygon'], function(MapPolygon){
         var self = this;
 
         var init = function(){
-            blockAvgWidth = 50;
             self.blocks = [];
 
             var pos = 0;
+            var lastY = 200;
             while (pos < mapWidth) {
-                addMapBlock(pos, 200);
-                pos += blockAvgWidth;
+                var newWidth = GMath.randInt(BLOCKAVGWIDTH - 25, BLOCKAVGWIDTH + 25);
+                var newY = GMath.randInt(200 - 50, 200 + 50);
+                addMapBlock(pos, lastY, newY, newWidth);
+                lastY = newY;
+                pos += newWidth;
             }
         };
 
-        var addMapBlock = function(x, y){
+        var addMapBlock = function(x, y, tY, width){
             var newBlock = new MapPolygon({
-                x: x, y: y,
-                width: BLOCKAVGWIDTH,
+                x: x, y: y, tY: tY,
+                width: width,
                 bottomCutOff: BLOCKCUTOFF
             });
             self.blocks.push(newBlock);

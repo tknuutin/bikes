@@ -1,5 +1,5 @@
 
-define(['src/Shape'], function(Shape){
+define(['src/shapes/Shape'], function(Shape){
     var MapBlock = function(opts){
         var self = this;
 
@@ -9,7 +9,7 @@ define(['src/Shape'], function(Shape){
         };
 
         this.draw = function(ctx){
-            ctx.fillStyle = '#CED9D5'
+            ctx.fillStyle = opts.fillStyle || '#CED9D5';
             ctx.fillRect(0, 0, self.width, self.height);
         };
 

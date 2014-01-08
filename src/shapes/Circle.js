@@ -1,5 +1,5 @@
 
-define(['src/Shape'], function(Shape){
+define(['src/shapes/Shape'], function(Shape){
     var Circle = function(opts){
         var self = this;
 

@@ -1,9 +1,12 @@
 
-define(['src/Rectangle'], function(MapBlock){
+define(['src/shapes/Rectangle'], function(Rectangle){
     var Renderer = function(canvas, width, height){
         var self = this;
         var ctx;
         var renderCalled = false;
+        var cameraPos = {
+            x: 0, y: 0,
+        };
 
         var init = function(){
             ctx = canvas.getContext('2d');
@@ -18,13 +21,28 @@ define(['src/Rectangle'], function(MapBlock){
             }, 33);
         };
 
+        self.clear = function(){
+            ctx.fillStyle = '#FFF';
+            ctx.fillRect(0, 0, width, height);
+        };
+
         var _render = function(){
+            self.clear();
+
+            ctx.save();
+            ctx.translate(cameraPos.x, cameraPos.y);
+
             for (var i = 0, len = self.shapes.length; i < len; i++) {
-                console.log('drawing', self.shapes[i].name);
                 self.shapes[i].predraw(ctx);
                 self.shapes[i].draw(ctx);
                 self.shapes[i].postdraw(ctx);
             }
+            ctx.restore();
+        };
+
+        this.scrollHorizontal = function(amount){
+            cameraPos.x += amount;
+            self.render();
         };
 
         this.createFooterBlock = function(y){
