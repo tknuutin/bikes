@@ -7,6 +7,8 @@ define(['src/shapes/Shape'], function(Shape){
             self.radius = opts.radius;
 
             Shape.call(self, opts);
+
+            self.register();
         };
 
         this.draw = function(ctx){

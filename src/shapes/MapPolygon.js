@@ -20,6 +20,8 @@ define(['src/shapes/Shape'], function(Shape){
             self.points.push({
                 x: self.width, y: self.tY - self.y,
             });
+
+            self.register();
         };
 
         this.draw = function(ctx){

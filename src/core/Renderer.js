@@ -9,7 +9,6 @@ define(['src/shapes/Rectangle'], function(Rectangle){
         var canvas = opts.canvas;
 
         var ctx;
-        var renderCalled = false;
         var cameraPos = {
             x: 0, y: 0,
         };
@@ -17,14 +16,6 @@ define(['src/shapes/Rectangle'], function(Rectangle){
         var init = function(){
             ctx = canvas.getContext('2d');
             self.shapes = [];
-
-            // Replace with RAF at some point I guess
-            setInterval(function(){
-                if (renderCalled) {
-                    renderCalled = false;
-                    _render();
-                }
-            }, 33);
         };
 
         self.clear = function(){
@@ -71,7 +62,7 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
-        var _render = function(){
+        this.render = function(){
             self.clear();
             self.startDebug(ctx);
             
@@ -99,10 +90,6 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
-        this.registerMapGen = function(mapgen){
-            self.mapgen = mapgen;
-        };
-
         this.enableBlockCutoff = function(y){
             self.fillAfter = y;
         };
@@ -123,10 +110,6 @@ define(['src/shapes/Rectangle'], function(Rectangle){
 
         this.register = function(shape){
             self.shapes.push(shape);
-        };
-
-        this.render = function(){
-            renderCalled = true;
         };
 
         init();
