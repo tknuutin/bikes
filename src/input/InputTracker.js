@@ -44,6 +44,7 @@ define([], function(){
 
         this.onUpArrowDown = function(evt){
             if (!accelerating) {
+                stopAcceleration = false;
                 controller.accelerate();
                 accelerating = true;
 
@@ -62,31 +63,39 @@ define([], function(){
             
         };
 
+        var braking = false;
+        this.onDownArrowDown = function(evt){
+            if (!braking) {
+                controller.startBrake();
+                braking = true;
+            }
+        };
+
+        this.onDownArrowUp = function(evt){
+            if (braking) {
+                controller.stopBrake();
+            }
+            braking = false;
+        };
+
         this.onUpArrowUp = function(evt){
             stopAcceleration = true;
         };
 
         this.onLeftArrowDown = function(evt){
-            // Can only scroll in one direction at a time
-            if (!controller.leftArrowDown && !controller.rightArrowDown) {
-                controller.moveBike(-1);
-            }
-            controller.leftArrowDown = true;
+            // nothing
         };
 
         this.onLeftArrowUp = function(evt){
-            controller.leftArrowDown = false;
+            controller.pullFront();
         };
 
         this.onRightArrowDown = function(evt){
-            if (!controller.rightArrowDown) {
-                controller.moveBike(1);
-            }
-            controller.rightArrowDown = true;
+            // nothing
         };
 
         this.onRightArrowUp = function(evt){
-            controller.rightArrowDown = false;
+            controller.pullBack();
         };
 
         init();

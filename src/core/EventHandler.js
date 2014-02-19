@@ -43,6 +43,10 @@ define([
             }
         };
 
+        this.onTeleportWorld = function(){
+            controller.teleportWorld();
+        };
+
         this.onGenerateJoint = function(data){
             PhysProxy.joint(worldManager.world, data.shape1, data.shape2, data.type, data.anchor);
         };

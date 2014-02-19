@@ -8,7 +8,8 @@ define([
     'src/core/Looper',
     'src/phys/PhysProxy',
     'src/entities/EntityManager',
-    ], function(PageManager, Renderer, EventHandler, GameMap, Bike, Looper, PhysProxy, EntityManager){
+    'src/utils/CappedFunction'
+    ], function(PageManager, Renderer, EventHandler, GameMap, Bike, Looper, PhysProxy, EntityManager, CappedFunction){
     var GameController = function(container, canvas){
         var self = this;
         var page;
@@ -41,14 +42,31 @@ define([
             evthandler = new EventHandler(self, worldManager, renderer);
             gameMap = new GameMap(500);
             renderer.enableBlockCutoff(GameMap.BLOCKCUTOFF);
+
             bike = new Bike();
 
             var looper = new Looper(self, worldManager, entityManager, renderer);
+
+            self.pullFront = new CappedFunction(self.pullFront, 600);
+            self.pullBack = new CappedFunction(self.pullBack, 600);
         };
 
         this.tick = function(){
             gameMap.tick();
             bike.tick();
+
+            
+
+            renderer.scrollHorizontallyTo(bike.x + CAMERAOFFSETX );
+
+            if (bike.x > 1500) {
+                evthandler.onTeleportWorld();
+            }
+        };
+
+        this.teleportWorld = function(){
+            entityManager.teleportWorld(1500);
+            gameMap.teleportWorld(1500);
         };
 
         var onScroll = function(cameraX){
@@ -73,18 +91,20 @@ define([
 
         var CAMERAOFFSETX = -100;
 
-        this.moveBike = function(direction){
-            var intervalId;
-            intervalId = setInterval(function(){
-                if ((direction === -1 && self.leftArrowDown) || (direction === 1 && self.rightArrowDown)) {
-                    var amount = 5 * direction;
-                    bike.x += amount;
-                    renderer.scrollHorizontallyTo(bike.x + CAMERAOFFSETX );
-                }
-                else {
-                    clearInterval(intervalId);
-                }
-            }, 33);
+        this.pullFront = function(){
+            bike.pullFront();
+        };
+
+        this.pullBack = function(){
+            bike.pullBack();
+        };
+
+        this.startBrake = function(){
+            bike.startBrake();
+        };
+
+        this.stopBrake = function(){
+            bike.stopBrake();
         };
 
         init();

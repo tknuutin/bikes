@@ -8,12 +8,17 @@ define([
         var conf = config || {};
 
         var SEED = 20//Math.random(); // replace this with a number of your choosing
+        //var SEED = Math.random(); // replace this with a number of your choosing
         console.log('RNG SEED:', SEED);
         var rng = GMath.seededRNG(SEED);
 
         var init = function(){
             self.pos = 0;
             self.lastY = 200;
+        };
+
+        self.teleportWorld = function(amount){
+            self.pos -= amount;
         };
 
         self.generateBlock = function(){

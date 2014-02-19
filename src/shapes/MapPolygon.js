@@ -6,10 +6,13 @@ define(['src/shapes/Shape'], function(Shape){
 
         var init = function(){
             bottomCutOff = opts.bottomCutOff;
+            //console.log('new mappoly');
             Shape.call(self, opts);
             self.debug = false;
+            self.type = 'MapPolygon';
             self.name = 'polygon' + self.x + '.' + self.y;
             self.tY = opts.tY;
+            self.physics = true;
             
             self.points = [];
 
@@ -22,6 +25,14 @@ define(['src/shapes/Shape'], function(Shape){
             });
 
             self.register();
+        };
+
+        this.tick = function(){
+            //
+        };
+
+        this.phystick = function(){
+            //
         };
 
         this.draw = function(ctx){

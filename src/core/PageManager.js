@@ -16,18 +16,11 @@ define(['src/entities/EntityFinder'], function(EF){
 
         var initDebugButton = function(){
             BIKEGLOBALS.onOneClick = function(){
-                var block;
-
-                EF.find('redblock', function(foundBlock){
-                    block = foundBlock;
+                console.log('hello?');
+                BIKEGLOBALS.pipe.dispatchEvent({
+                    name: 'TeleportWorld',
+                    data: undefined,
                 });
-
-                if (block) {
-                    console.log('redblock pos', block.body.m_position, block);
-                }
-                else {
-                    console.log('not found yet!');
-                }
             };
 
             BIKEGLOBALS.onTwoClick = function(){

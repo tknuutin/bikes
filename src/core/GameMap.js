@@ -40,6 +40,10 @@ define([
             });
         };
 
+        this.teleportWorld = function(amount){
+            self.mapgen.teleportWorld(amount);
+        };
+
         var addBlock = function(){
             var newBlock = self.mapgen.generateBlock();
             self.blocks.push(newBlock);

@@ -9,7 +9,7 @@ define([
     PhysProxy.physTick = function(obj){
         obj.x = obj.body.m_position.x;
         obj.y = obj.body.m_position.y;
-        obj.rotation = obj.body.GetRotation() % Math.PI;
+        obj.rotation = obj.body.GetRotation() % (Math.PI * 2);
     };
 
     PhysProxy.physTickRect = function(rect){
@@ -23,7 +23,7 @@ define([
     PhysProxy.getWorld = function(){
         var worldAABB = new b2AABB();
         worldAABB.minVertex.Set(-1000, -1000);
-        worldAABB.maxVertex.Set(1000, 1000);
+        worldAABB.maxVertex.Set(3000, 1000);
         var gravity = new b2Vec2(0, 700);
         var doSleep = true;
         var world = new b2World(worldAABB, gravity, doSleep);
@@ -58,6 +58,21 @@ define([
         return groundBd;
     };
 
+    var createMapPolygon = function(world, polygon){
+        var polySd = new b2PolyDef();
+        polySd.vertexCount = 4;
+        polySd.vertices[0].Set(0, 0);
+        polySd.vertices[1].Set(polygon.width, (polygon.tY - polygon.y) / 1);
+        polySd.vertices[2].Set(polygon.width, 100);
+        polySd.vertices[3].Set(0, 100);
+
+        var polyBd = new b2BodyDef();
+        polyBd.AddShape(polySd);
+        polyBd.position.Set(polygon.x, polygon.y);
+
+        polygon.body = world.CreateBody(polyBd);
+    };
+
     function createBox(world, rect) {
         var boxSd = new b2BoxDef();
         boxSd.density = 1.0;
@@ -83,7 +98,7 @@ define([
         var tranlatedRadius = circle.radius;
         ballSd.radius = tranlatedRadius;
         ballSd.restitution = 0.2;
-        ballSd.friction = 0.2;
+        ballSd.friction = 0.8;
         var ballBd = new b2BodyDef();
         ballBd.AddShape(ballSd);
         var abscoords = circle.getAbsoluteCoordinates();
@@ -93,7 +108,7 @@ define([
         circle.body = ballBody;
         circle.physics = true;
         ballBody.userData = circle;
-        console.log(circle.body);
+        //console.log(circle.body);
     };
 
     var createBikePhys = function(world, bike){
@@ -115,7 +130,7 @@ define([
     };
 
     PhysProxy.joint = function(world, shape1, shape2, type, anchor){
-        console.log('joint:', shape1, shape2, type, anchor);
+        //console.log('joint:', shape1, shape2, type, anchor);
         var joint;
         if (type == 'revolute') {
             joint = new b2RevoluteJointDef();
@@ -143,6 +158,10 @@ define([
         if (shape.type === 'Bike') {
             console.log('bike physics!!');
             createBikePhys(worldManager.world, shape);
+        }
+
+        if (shape.type === 'MapPolygon') {
+            createMapPolygon(worldManager.world, shape);
         }
     };
 

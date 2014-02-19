@@ -9,10 +9,10 @@ define([], function(){
             // Replace with RAF at some point I guess
             setInterval(function(){
                 window.requestAnimationFrame(function(){
+
                     if (!BIKEGLOBALS.stopped) {
                         if (!BIKEGLOBALS.physstopped) {
-                            //console.log('worldstep!');
-                            worldManager.world.Step((1.0/60), 1);    
+                            worldManager.world.Step((1.0/60), 1);
                         }
 
                         var physentities = entityManager.physentities;

@@ -11,6 +11,7 @@ define([
 
         var loaded = 0;
         var LOADS;
+        var MAX_ANGULAR = 30;
 
         var init = function(){
 
@@ -50,6 +51,11 @@ define([
                 physics: true,
             });
 
+            setInterval(function(){
+                console.log('bike at', self.x);
+                console.log('tire mpos', self.leftTire.body.m_position.x);
+            }, 2000);
+
             self.shapes = [self.leftTire, self.rightTire, self.bikeBody];
             //
         };
@@ -61,6 +67,8 @@ define([
                 anchor: self.leftTire.body.GetCenterPosition(),
                 type: 'revolute',
             });
+
+            console.log(self.leftTire.body);
 
             ED.dispatch('GenerateJoint', {
                 shape1: self.rightTire,
@@ -81,13 +89,54 @@ define([
         };
 
         this.tick = function(){
-            //
+            for (var i = 0, len = self.shapes.length; i < len; i++) {
+                self.shapes[i].tick();
+            }
+
+            self.x = self.leftTire.x;
+            self.y = self.leftTire.y;
+        };
+
+        var getFrontTireNormal = function(direction, multiplier){
+            var x2 = self.rightTire.x;
+            var x1 = self.bikeBody.x;
+            var y2 = self.rightTire.y;
+            var y1 = self.bikeBody.y;
+            var dx = x2 - x1;
+            var dy = y2 - y1;
+
+            var impulse = new b2Vec2(dy * direction, dx * (direction * -1));
+            impulse.Multiply(multiplier * 100);
+            return impulse;
+        };
+
+        this.pullFront = function(){
+            self.rightTire.body.ApplyImpulse(getFrontTireNormal(1, 200), self.rightTire.asVector());
+            self.leftTire.body.ApplyImpulse(getFrontTireNormal(-1, 200), self.leftTire.asVector());  
+        };
+
+        this.pullBack = function(){
+            self.leftTire.body.ApplyImpulse(getFrontTireNormal(1, 90), self.leftTire.asVector());
+            self.rightTire.body.ApplyImpulse(getFrontTireNormal(-1, 90), self.rightTire.asVector());
         };
 
         this.accelerate = function(amount){
-            self.leftTire.setTurn(self.leftTire.turn + 2);
-            self.leftTire.body.ApplyTorque(10000);
-            console.log('torque now', self.leftTire.body.m_torque);
+            var angularVelocity = self.leftTire.body.GetAngularVelocity();
+            if (angularVelocity < MAX_ANGULAR) {
+                self.leftTire.body.ApplyTorque(40000000);    
+            }
+        };
+
+        this.startBrake = function(){
+            console.log('startbrake');
+            self.leftTire.body.SetAngularVelocity(0);
+            self.leftTire.body.m_shapeList.m_friction = 100000000;
+        };
+
+        this.stopBrake = function(){
+            console.log('stopbrake');
+            self.leftTire.body.m_shapeList.m_friction = 100;
+            //self.leftTire.body.m_angularDamping = 1;
         };
 
         init();

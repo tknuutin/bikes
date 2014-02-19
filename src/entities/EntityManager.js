@@ -8,7 +8,8 @@ define([
         var self = this;
 
         var init = function(){
-            self.entities = {};
+            self.entities = [];
+            self.namedEntities = {};
             self.physentities = [];
         };
 
@@ -17,14 +18,32 @@ define([
             self.physentities.push(entity);  
         };
 
+        this.teleportWorld = function(border){
+            console.log('helloouuuu');
+            var entities = self.entities;
+            for (var i = 0, len = entities.length; i < len; i++) {
+                var entity = entities[i];
+                entity.x -= border;
+
+                if (entity.body) {
+                    var pos = entity.body.GetCenterPosition();
+                    var rotation = entity.body.GetRotation();
+                    entity.body.SetCenterPosition(new b2Vec2(pos.x - border, pos.y), rotation);
+                    //console.log('physobj set to', pos.x - border);  
+                }
+            }
+        };
+
         this.addEntity = function(entity){
+            self.entities.push(entity);
+
             if (entity.name) {
                 var name = entity.name;
-                if (self.entities[name]) {
+                if (self.namedEntities[name]) {
                     throw new Error('Entity with name ' + name + ' already exists.');
                 }
                 else {
-                    self.entities[name] = entity;
+                    self.namedEntities[name] = entity;
                 }
             }
 
@@ -40,7 +59,7 @@ define([
         };
 
         this.getEntity = function(name){
-            return self.entities[name];
+            return self.namedEntities[name];
         };
 
         init();
