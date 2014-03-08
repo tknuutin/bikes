@@ -1,8 +1,8 @@
 
 define([
     'src/shapes/Shape',
-    'src/phys/PhysProxy'
-    ], function(Shape, PhysProxy){
+    'src/phys/PhysManager'
+    ], function(Shape, PhysManager){
     var Wheel = function(opts){
         var self = this;
 
@@ -10,6 +10,10 @@ define([
 
         var init = function(){
             Shape.call(self, opts);
+
+            self.physics = opts.physics !== undefined ? opts.physics : {};
+            self.physics.type = 'ball';
+            
 
             //self.physics = true;
             self.type = 'Wheel';
@@ -21,6 +25,7 @@ define([
                 self.height = 50;
                 
                 self.radius = Math.round(self.width / 2);
+                self.physics.radius = self.width / 2;
                 self.rotation = 0;
 
                 self.register();
@@ -34,20 +39,8 @@ define([
             self.img.src = 'assets/img/wheel3.png';
         };
 
-        this.setTurn = function(amount){
-            self.turn = Math.min(amount, maxTurn);
-        };
-
-        var applyWheelFriction = function(turn){
-            return turn - (Math.PI / 180) * 2;
-        };
-
-        var applyGroundFriction = function(turn){
-            return turn - (Math.PI / 180);
-        };
-
         this.phystick = function(){
-            PhysProxy.physTickCircle(self);
+            PhysManager.physTickCircle(self);
         };
 
         this.tick = function(){

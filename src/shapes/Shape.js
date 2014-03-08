@@ -16,13 +16,14 @@ define(['src/core/Dispatcher'], function(ED){
             self.rotationPointY = 0;
             self.noRegister = options.noRegister;
             self.debug = options.debug;
-            self.physics = options.physics !== undefined ? options.physics : false;        
+            self.physics = options.physics !== undefined ? options.physics : false;      
         };
 
         this.register = function(){
             if (!self.noRegister) {
                 ED.dispatch('ShapeCreated', {
-                    inst: self
+                    inst: self,
+                    physics: self.physics,
                 });    
             }
         };

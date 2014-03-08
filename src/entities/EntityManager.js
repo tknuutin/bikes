@@ -1,8 +1,8 @@
 
 define([
     //'path/to/Thing',
-    'src/phys/PhysProxy',
-    ], function(PhysProxy){
+    'src/phys/PhysManager',
+    ], function(PhysManager){
 
     var EntityManager = function(worldManager){
         var self = this;
@@ -13,13 +13,14 @@ define([
             self.physentities = [];
         };
 
-        var addPhysEntity = function(entity){
-            PhysProxy.createBody(worldManager, entity);
-            self.physentities.push(entity);  
+        var addPhysEntity = function(entity, opts){
+            PhysManager.createBody(worldManager, entity, opts);
+            if (!opts.fixed) {
+                self.physentities.push(entity);    
+            }
         };
 
         this.teleportWorld = function(border){
-            console.log('helloouuuu');
             var entities = self.entities;
             for (var i = 0, len = entities.length; i < len; i++) {
                 var entity = entities[i];
@@ -34,6 +35,16 @@ define([
             }
         };
 
+        this.addPhysEntity = function(entity, opts){
+            addPhysEntity(entity, opts);
+                
+            if (entity.shapes) {
+                for (var i = 0, len = entity.shapes.length; i < len; i++) {
+                    addPhysEntity(entity.shapes[i], opts);
+                }
+            }
+        };
+
         this.addEntity = function(entity){
             self.entities.push(entity);
 
@@ -44,16 +55,6 @@ define([
                 }
                 else {
                     self.namedEntities[name] = entity;
-                }
-            }
-
-            if (entity.physics) {
-                addPhysEntity(entity);
-                
-                if (entity.shapes) {
-                    for (var i = 0, len = entity.shapes.length; i < len; i++) {
-                        addPhysEntity(entity.shapes[i]);
-                    }
                 }
             }
         };

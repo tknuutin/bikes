@@ -29,14 +29,20 @@ define([
                 name: 'redblock',
                 x: 30, y: 120, width: 50, height: 50,
                 fillStyle: '#ff0055',
-                physics: true,
+                physics: {
+                    type: 'box',
+                    width: 50, height: 50,
+                },
             });
 
             rect2 = new Rectangle({
                 name: 'redblock2',
                 x: 270, y: 0, width: 100, height: 10,
                 fillStyle: '#ff0000',
-                physics: true,
+                physics: {
+                    type: 'box',
+                    width: 100, height: 10,
+                },
             });
         };
 

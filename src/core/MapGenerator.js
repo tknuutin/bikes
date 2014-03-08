@@ -7,7 +7,7 @@ define([
         var self = this;
         var conf = config || {};
 
-        var SEED = 20//Math.random(); // replace this with a number of your choosing
+        var SEED = 20;
         //var SEED = Math.random(); // replace this with a number of your choosing
         console.log('RNG SEED:', SEED);
         var rng = GMath.seededRNG(SEED);

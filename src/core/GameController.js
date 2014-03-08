@@ -6,10 +6,10 @@ define([
     'src/core/GameMap',
     'src/shapes/Bike',
     'src/core/Looper',
-    'src/phys/PhysProxy',
+    'src/phys/PhysManager',
     'src/entities/EntityManager',
     'src/utils/CappedFunction'
-    ], function(PageManager, Renderer, EventHandler, GameMap, Bike, Looper, PhysProxy, EntityManager, CappedFunction){
+    ], function(PageManager, Renderer, EventHandler, GameMap, Bike, Looper, PhysManager, EntityManager, CappedFunction){
     var GameController = function(container, canvas){
         var self = this;
         var page;
@@ -26,7 +26,7 @@ define([
             window.BIKEGLOBALS.stage = container;
             window.BIKEGLOBALS.stopped = false;
 
-            worldManager = PhysProxy.getWorld();
+            worldManager = PhysManager.getWorld();
             entityManager = new EntityManager(worldManager);
             self.rightArrowDown = false;
             self.leftArrowDown = false;
@@ -75,6 +75,10 @@ define([
 
         this.addEntity = function(entity){
             entityManager.addEntity(entity);
+        };
+
+        this.addPhysEntity = function(entity, physics){
+            entityManager.addPhysEntity(entity, physics);
         };
 
         this.getEntity = function(name){

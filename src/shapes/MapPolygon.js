@@ -12,7 +12,7 @@ define(['src/shapes/Shape'], function(Shape){
             self.type = 'MapPolygon';
             self.name = 'polygon' + self.x + '.' + self.y;
             self.tY = opts.tY;
-            self.physics = true;
+
             
             self.points = [];
 
@@ -23,6 +23,17 @@ define(['src/shapes/Shape'], function(Shape){
             self.points.push({
                 x: self.width, y: self.tY - self.y,
             });
+
+            self.physics = {
+                fixed: true,
+                type: 'polygon',
+                vertices: [
+                    { x: 0, y: 0,},
+                    { x: self.width, y: self.tY - self.y },
+                    { x: self.width, y: 100 },
+                    { x: 0, y: 100 },
+                ],
+            };
 
             self.register();
         };

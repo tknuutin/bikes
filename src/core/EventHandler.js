@@ -1,8 +1,8 @@
 
 define([
     'src/input/InputTracker',
-    'src/phys/PhysProxy'
-    ], function(InputTracker, PhysProxy){
+    'src/phys/PhysManager'
+    ], function(InputTracker, PhysManager){
     var EventHandler = function(controller, worldManager, renderer){
         var self = this;
         var input;
@@ -48,12 +48,15 @@ define([
         };
 
         this.onGenerateJoint = function(data){
-            PhysProxy.joint(worldManager.world, data.shape1, data.shape2, data.type, data.anchor);
+            PhysManager.joint(worldManager.world, data.shape1, data.shape2, data.type, data.anchor);
         };
 
         this.onShapeCreated = function(data){
             renderer.register(data.inst);
             controller.addEntity(data.inst);
+            if (data.physics) {
+                controller.addPhysEntity(data.inst, data.physics);
+            }
             renderer.render();
         };
 

@@ -1,8 +1,8 @@
 
 define([
     'src/shapes/Shape',
-    'src/phys/PhysProxy',
-    ], function(Shape, PhysProxy){
+    'src/phys/PhysManager',
+    ], function(Shape, PhysManager){
     var Rectangle = function(opts){
         var self = this;
 
@@ -10,8 +10,7 @@ define([
             Shape.call(self, opts);
             self.type = 'Rectangle';
             self.name = self.name || 'block';
-            self.physdebug = true;
-
+            self.physics = opts.physics;
             self.register();
         };
 
@@ -24,7 +23,7 @@ define([
 
         this.phystick = function(){
             if (self.physics) {
-                PhysProxy.physTickRect(self);    
+                PhysManager.physTickRect(self);    
             }
         };
 

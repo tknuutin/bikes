@@ -1,26 +1,26 @@
 
 
 define([
-    //''
-    ], function(){
+    'src/phys/PhysFactory',
+    ], function(PhysFactory){
 
-    var PhysProxy = {};
+    var PhysManager = {};
 
-    PhysProxy.physTick = function(obj){
+    PhysManager.physTick = function(obj){
         obj.x = obj.body.m_position.x;
         obj.y = obj.body.m_position.y;
         obj.rotation = obj.body.GetRotation() % (Math.PI * 2);
     };
 
-    PhysProxy.physTickRect = function(rect){
-        PhysProxy.physTick(rect);
+    PhysManager.physTickRect = function(rect){
+        PhysManager.physTick(rect);
     };
 
-    PhysProxy.physTickCircle = function(circle){
-        PhysProxy.physTick(circle);
+    PhysManager.physTickCircle = function(circle){
+        PhysManager.physTick(circle);
     };
 
-    PhysProxy.getWorld = function(){
+    PhysManager.getWorld = function(){
         var worldAABB = new b2AABB();
         worldAABB.minVertex.Set(-1000, -1000);
         worldAABB.maxVertex.Set(3000, 1000);
@@ -28,17 +28,9 @@ define([
         var doSleep = true;
         var world = new b2World(worldAABB, gravity, doSleep);
 
-        //createBox(world, 0, 125, 10, 250);
-        //createBox(world, { x: 50, y: 200, width: 10, height: 50 });
-
-        var ground = world.CreateBody(PhysProxy.createGround(world));
+        var ground = world.CreateBody(PhysManager.createGround(world));
 
         BIKEGLOBALS.physstopped = false;
-
-        var foo = world.CreateBody;
-        world.CreateBody = function(){
-            return foo.apply(world, arguments);
-        };
 
         return {
             world: world,
@@ -46,7 +38,7 @@ define([
         }
     };
 
-    PhysProxy.createGround = function(){
+    PhysManager.createGround = function(){
         var groundSd = new b2BoxDef();
         groundSd.extents.Set(1000, 300);
         //groundSd.density = 1.0;
@@ -60,6 +52,7 @@ define([
 
     var createMapPolygon = function(world, polygon){
         var polySd = new b2PolyDef();
+
         polySd.vertexCount = 4;
         polySd.vertices[0].Set(0, 0);
         polySd.vertices[1].Set(polygon.width, (polygon.tY - polygon.y) / 1);
@@ -92,13 +85,13 @@ define([
     }
 
     var createBall = function(world, circle){
-        var ballSd = new b2CircleDef();
+        
         ballSd.density = 1.0;
 
         var tranlatedRadius = circle.radius;
         ballSd.radius = tranlatedRadius;
         ballSd.restitution = 0.2;
-        ballSd.friction = 0.8;
+        ballSd.friction = 10000000;
         var ballBd = new b2BodyDef();
         ballBd.AddShape(ballSd);
         var abscoords = circle.getAbsoluteCoordinates();
@@ -108,28 +101,10 @@ define([
         circle.body = ballBody;
         circle.physics = true;
         ballBody.userData = circle;
-        //console.log(circle.body);
+        console.log(circle.body);
     };
 
-    var createBikePhys = function(world, bike){
-        createBall(world, bike.leftTire);
-        // createBall(world, bike.rightTire);
-        // createBox(world, bike.bikeBody);
-
-        // var leftJoint = new b2RevoluteJointDef();
-        // leftJoint.body1 = bike.leftTire.body;
-        // leftJoint.body2 = bike.bikeBody.body;
-        // leftJoint.anchorPoint = bike.leftTire.body.GetCenterPosition();
-        // world.CreateJoint(leftJoint);
-
-        // var rightJoint = new b2RevoluteJointDef();
-        // rightJoint.body1 = bike.rightTire.body;
-        // rightJoint.body2 = bike.bikeBody.body;
-        // rightJoint.anchorPoint = bike.rightTire.body.GetCenterPosition();
-        // world.CreateJoint(rightJoint);
-    };
-
-    PhysProxy.joint = function(world, shape1, shape2, type, anchor){
+    PhysManager.joint = function(world, shape1, shape2, type, anchor){
         //console.log('joint:', shape1, shape2, type, anchor);
         var joint;
         if (type == 'revolute') {
@@ -142,28 +117,15 @@ define([
         joint.body1 = shape1.body;
         joint.body2 = shape2.body;
         joint.anchorPoint = anchor;
-        world.CreateJoint(joint);
+
+        var created = world.CreateJoint(joint);
+        shape1.joint = created;
+        shape2.joint = created;
     };
 
-    PhysProxy.createBody = function(worldManager, shape){
-        if (shape.type === 'Wheel') {
-            console.log('ball physics');
-            createBall(worldManager.world, shape);
-        }
-
-        if (shape.type === 'Rectangle') {
-            createBox(worldManager.world, shape);
-        }
-
-        if (shape.type === 'Bike') {
-            console.log('bike physics!!');
-            createBikePhys(worldManager.world, shape);
-        }
-
-        if (shape.type === 'MapPolygon') {
-            createMapPolygon(worldManager.world, shape);
-        }
+    PhysManager.createBody = function(worldManager, shape, options){
+        PhysFactory.create(worldManager.world, shape, options);
     };
 
-    return PhysProxy;
+    return PhysManager;
 });
