@@ -1,4 +1,5 @@
 
+// The bike of the player drawn on the Canvas. Consists of multiple parts.
 define([
     'src/shapes/Wheel',
     'src/shapes/Rectangle',
@@ -87,6 +88,7 @@ define([
             }
         };
 
+        // Game logic tick for Bike, keeps track of position.
         this.tick = function(){
             for (var i = 0, len = self.shapes.length; i < len; i++) {
                 self.shapes[i].tick();
@@ -109,16 +111,19 @@ define([
             return impulse;
         };
 
+        // Pull front wheel upwards.
         this.pullFront = function(){
             self.rightTire.body.ApplyImpulse(getFrontTireNormal(1, 200), self.rightTire.asVector());
             self.leftTire.body.ApplyImpulse(getFrontTireNormal(-1, 200), self.leftTire.asVector());  
         };
 
+        // Push front wheel backwards. Rename func???
         this.pullBack = function(){
             self.leftTire.body.ApplyImpulse(getFrontTireNormal(1, 150), self.leftTire.asVector());
             self.rightTire.body.ApplyImpulse(getFrontTireNormal(-1, 150), self.rightTire.asVector());
         };
 
+        // Accelerate back wheel.
         this.accelerate = function(amount){
             var angularVelocity = self.leftTire.body.GetAngularVelocity();
             if (angularVelocity < MAX_ANGULAR) {
@@ -126,6 +131,7 @@ define([
             }
         };
 
+        // Start braking by stopping wheel and applying a lot of friction. 
         this.startBrake = function(){
             self.leftTire.body.SetAngularVelocity(0);
             self.leftTire.joint.m_enableLimit = true;
@@ -133,6 +139,7 @@ define([
             self.leftTire.body.m_shapeList.m_friction = 1000000000000000;
         };
 
+        // Stop braking by alowing angular velocity and restoring friction.
         this.stopBrake = function(){
             self.leftTire.body.m_shapeList.m_friction = 10000000;
             self.leftTire.joint.m_enableLimit = false;

@@ -1,4 +1,5 @@
 
+// A block of the shape of the game world. Is fixed in game physics.
 define(['src/shapes/Shape'], function(Shape){
     var MapPolygon = function(opts){
         var self = this;
@@ -42,10 +43,12 @@ define(['src/shapes/Shape'], function(Shape){
             //
         };
 
+        // Physics tick for MapPolygon, nothing here.
         this.phystick = function(){
             //
         };
 
+        // Draw polygon.
         this.draw = function(ctx){
             ctx.beginPath();
             ctx.moveTo(0, 0);

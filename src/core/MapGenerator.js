@@ -1,4 +1,5 @@
 
+// Generates a random world.
 define([
     'src/math/GameMath',
     'src/shapes/MapPolygon',
@@ -17,10 +18,12 @@ define([
             self.lastY = 200;
         };
 
+        // Teleport world back to a specific position.
         self.teleportWorld = function(amount){
             self.pos -= amount;
         };
 
+        // Generate a new game world block.
         self.generateBlock = function(){
             var newWidth = rng(conf.blockAvgWidth - 25, conf.blockAvgWidth + 25);
             var newY = rng(200 - 50, 200 + 50);

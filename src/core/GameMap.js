@@ -1,4 +1,5 @@
 
+// Game world definition and manager.
 define([
     'src/core/MapGenerator',
     'src/shapes/Rectangle',
@@ -46,6 +47,7 @@ define([
             });
         };
 
+        // Teleport world to a specific position.
         this.teleportWorld = function(amount){
             self.mapgen.teleportWorld(amount);
         };
@@ -59,6 +61,8 @@ define([
             return cameraX + mapWidth >= self.mapgen.pos - 100;
         };
 
+        // Handle a scroll event by generating more blocks until we're comfortable
+        // we're not going to run into the world edge any time soon.
         self.onScroll = function(cameraX){
             var need = needMoreBlocks(cameraX);
             while (need) {

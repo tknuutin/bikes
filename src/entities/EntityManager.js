@@ -1,4 +1,5 @@
 
+// A manager for all entities in the world.
 define([
     //'path/to/Thing',
     'src/phys/PhysManager',
@@ -20,6 +21,7 @@ define([
             }
         };
 
+        // Teleport whole world.
         this.teleportWorld = function(border){
             var entities = self.entities;
             for (var i = 0, len = entities.length; i < len; i++) {
@@ -35,6 +37,7 @@ define([
             }
         };
 
+        // Add physics entity that has physics entities embedded.
         this.addPhysEntity = function(entity, opts){
             addPhysEntity(entity, opts);
                 
@@ -45,6 +48,8 @@ define([
             }
         };
 
+        // Add entity. If entity has a name, it will be considered unique. Adding two
+        // entities with the same name will generate an Error.
         this.addEntity = function(entity){
             self.entities.push(entity);
 
@@ -59,6 +64,7 @@ define([
             }
         };
 
+        // Find and return an entity with the given name.
         this.getEntity = function(name){
             return self.namedEntities[name];
         };

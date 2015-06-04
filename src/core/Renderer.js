@@ -1,4 +1,5 @@
 
+// The game world renderer. Takes in width, height, and canvas element.
 define(['src/shapes/Rectangle'], function(Rectangle){
     var Renderer = function(opts){
         var self = this;
@@ -18,11 +19,13 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             self.shapes = [];
         };
 
+        // Clear canvas.
         self.clear = function(){
             ctx.fillStyle = '#FFF';
             ctx.fillRect(0, 0, width, height);
         };
 
+        // Start debug step.
         self.startDebug = function(ctx){
             self.saves = 0;
             self.restores = 0;
@@ -48,6 +51,7 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
+        // Debug stop step.
         self.stopDebug = function(){
              if (self.debug) {
                 console.log('--- ENDDRAW ---');
@@ -62,6 +66,7 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
+        // Render world.
         this.render = function(){
             self.clear();
             self.startDebug(ctx);
@@ -90,10 +95,12 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             }
         };
 
+        // Enable game world block cut off at a specific y.
         this.enableBlockCutoff = function(y){
             self.fillAfter = y;
         };
 
+        // Immediately scroll horizontally to specific x.
         this.scrollHorizontallyTo = function(x){
             if (opts.onScroll) {
                 opts.onScroll(x);
@@ -103,11 +110,13 @@ define(['src/shapes/Rectangle'], function(Rectangle){
             self.render();
         };
 
+        // Scroll viewport horizontally.
         this.scrollHorizontal = function(amount){
             cameraPos.x += amount;
             self.render();
         };
 
+        // Register renderable shape.
         this.register = function(shape){
             self.shapes.push(shape);
         };

@@ -1,4 +1,5 @@
 
+// A circle in the Canvas.
 define(['src/shapes/Shape'], function(Shape){
     var Circle = function(opts){
         var self = this;
@@ -11,6 +12,7 @@ define(['src/shapes/Shape'], function(Shape){
             self.register();
         };
 
+        // Draw circle.
         this.draw = function(ctx){
             ctx.beginPath();
             ctx.arc(self.radius, self.radius, self.radius, 0, Math.PI * 2, true);

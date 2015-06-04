@@ -1,4 +1,6 @@
 
+// Tracks all user given input on the application. Currently only
+// attaches keyboard listeners on the body.
 define([], function(){
     var InputTracker = function(controller){
         var self = this;
@@ -41,7 +43,9 @@ define([], function(){
 
         var stopAcceleration = false;
         var accelerating = false;
+        var braking = false;
 
+        // Resolve UpArrow press down event.
         this.onUpArrowDown = function(evt){
             if (!accelerating) {
                 stopAcceleration = false;
@@ -63,7 +67,7 @@ define([], function(){
             
         };
 
-        var braking = false;
+        // Resolve DownArrow press down event.
         this.onDownArrowDown = function(evt){
             if (!braking) {
                 controller.startBrake();
@@ -71,6 +75,7 @@ define([], function(){
             }
         };
 
+        // Resolve DownArrow up event.
         this.onDownArrowUp = function(evt){
             if (braking) {
                 controller.stopBrake();
@@ -78,22 +83,27 @@ define([], function(){
             braking = false;
         };
 
+        // Resolve UpArrow up event.
         this.onUpArrowUp = function(evt){
             stopAcceleration = true;
         };
 
+        // Resolve LeftArrow down event.
         this.onLeftArrowDown = function(evt){
             // nothing
         };
 
+        // Resolve LeftArrow up event.
         this.onLeftArrowUp = function(evt){
             controller.pullFront();
         };
 
+        // Resolve RightArrow down event.
         this.onRightArrowDown = function(evt){
             // nothing
         };
 
+        // Resolve RightArrow up event.
         this.onRightArrowUp = function(evt){
             controller.pullBack();
         };

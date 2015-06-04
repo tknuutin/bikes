@@ -1,5 +1,10 @@
 
-
+// A simple wrapper over a function that limits how often it can be called.
+// Takes in a function and an interval in milliseconds of how often it can
+// be called. Useful for anything from the user.
+//
+// TODO: Remove console log and allow some sort of configuration of what
+// happens when cap is reached.
 define([
     //'path/to/Thing'
     ], function(){

@@ -1,4 +1,6 @@
 
+// DEPRECATED
+
 define([
     //'path/to/Thing'
     ], function(){

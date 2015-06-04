@@ -1,4 +1,5 @@
 
+// 
 define([
     //
     ], function(){
@@ -23,6 +24,7 @@ define([
         return finalBody;
     };
 
+    // Definitions for different types of known physics objects.
     var types = {
         ball: function(options){
             var fixture = new b2CircleDef();
@@ -56,6 +58,7 @@ define([
         },
     }
 
+    // Create a physics body on the world from a specific shape.
     PhysFactory.create = function(world, shape, options){
         var fixture = types[options.type](options);
         return createBody(world, shape, types.common(fixture, options), options);

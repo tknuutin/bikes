@@ -1,4 +1,5 @@
 
+// Main game controller. I know, this looks disturbingly like a God Object!
 define([
     'src/core/PageManager',
     'src/core/Renderer',
@@ -51,11 +52,10 @@ define([
             self.pullBack = new CappedFunction(self.pullBack, 600);
         };
 
+        // Game logic tick.
         this.tick = function(){
             gameMap.tick();
             bike.tick();
-
-            
 
             renderer.scrollHorizontallyTo(bike.x + CAMERAOFFSETX );
 
@@ -64,6 +64,7 @@ define([
             }
         };
 
+        // Teleport world back to a specific position.
         this.teleportWorld = function(){
             entityManager.teleportWorld(1500);
             gameMap.teleportWorld(1500);

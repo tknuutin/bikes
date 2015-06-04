@@ -1,4 +1,5 @@
 
+// A game object describing the bike wheel that can accelerate and rotate.
 define([
     'src/shapes/Shape',
     'src/phys/PhysManager'
@@ -39,10 +40,12 @@ define([
             self.img.src = 'assets/img/wheel3.png';
         };
 
+        // Calculate physics tick for this wheel, which is a rotating circle.
         this.phystick = function(){
             PhysManager.physTickCircle(self);
         };
 
+        // Game logic tick for this wheel, currently empty.
         this.tick = function(){
             //console.log(self.name);
             

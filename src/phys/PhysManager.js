@@ -1,4 +1,5 @@
 
+// Physics manager class for managing box2d physics.
 
 define([
     'src/phys/PhysFactory',
@@ -6,20 +7,24 @@ define([
 
     var PhysManager = {};
 
+    // Physics tick for a generic object.
     PhysManager.physTick = function(obj){
         obj.x = obj.body.m_position.x;
         obj.y = obj.body.m_position.y;
         obj.rotation = obj.body.GetRotation() % (Math.PI * 2);
     };
 
+    // Physics tick for a rectangular object.
     PhysManager.physTickRect = function(rect){
         PhysManager.physTick(rect);
     };
 
+    // Physics tick for a circular object.
     PhysManager.physTickCircle = function(circle){
         PhysManager.physTick(circle);
     };
 
+    // Create world.
     PhysManager.getWorld = function(){
         var worldAABB = new b2AABB();
         worldAABB.minVertex.Set(-1000, -1000);
@@ -38,6 +43,7 @@ define([
         }
     };
 
+    // Create ground. 
     PhysManager.createGround = function(){
         var groundSd = new b2BoxDef();
         groundSd.extents.Set(1000, 300);
@@ -66,6 +72,7 @@ define([
         polygon.body = world.CreateBody(polyBd);
     };
 
+    // Loaned from box2d - create world box.
     function createBox(world, rect) {
         var boxSd = new b2BoxDef();
         boxSd.density = 1.0;
@@ -104,6 +111,7 @@ define([
         console.log(circle.body);
     };
 
+    // Create a joint between two shapes.
     PhysManager.joint = function(world, shape1, shape2, type, anchor){
         //console.log('joint:', shape1, shape2, type, anchor);
         var joint;
@@ -123,6 +131,7 @@ define([
         shape2.joint = created;
     };
 
+    // Create a physics body.
     PhysManager.createBody = function(worldManager, shape, options){
         PhysFactory.create(worldManager.world, shape, options);
     };

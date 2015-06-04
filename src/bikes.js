@@ -1,4 +1,5 @@
 
+// Initialize game on window load and attach to canvas and container.
 window.onload = function(){
     require(['src/core/GameController'], function(GameController){
         var canvas = document.getElementById('canvas');

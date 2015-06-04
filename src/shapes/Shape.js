@@ -1,4 +1,5 @@
 
+// Generic Shape superclass for anything that is drawn on the Canvas.
 define(['src/core/Dispatcher'], function(ED){
     var Shape = function(opts){
         var self = this;
@@ -19,6 +20,9 @@ define(['src/core/Dispatcher'], function(ED){
             self.physics = options.physics !== undefined ? options.physics : false;      
         };
 
+        // Register as a shape on the game world. Will not do anything if
+        // noRegister flag exists on the Shape, as then will assume Shape is
+        // part of another Shape and is registered through it.
         this.register = function(){
             if (!self.noRegister) {
                 ED.dispatch('ShapeCreated', {
@@ -28,10 +32,12 @@ define(['src/core/Dispatcher'], function(ED){
             }
         };
 
+        // Get representation as b2Vec2 instance.
         this.asVector = function(){
             return new b2Vec2(self.x, self.y);
         };
 
+        // Get absolute coordinates by crawling upwards on Shape parent tree.
         this.getAbsoluteCoordinates = function(){
             var parent = self.parent;
 
@@ -45,6 +51,7 @@ define(['src/core/Dispatcher'], function(ED){
             return { x: x, y: y };
         };
 
+        // Initializes draw operations by translating and rotating.
         this.predraw = function(ctx){
             ctx.save();
 
@@ -62,36 +69,18 @@ define(['src/core/Dispatcher'], function(ED){
             return self.body.m_shapeList.m_vertices[num];
         };
 
+        // Finishes draw operation.
         this.postdraw = function(ctx){
             ctx.restore();
-
-            // if (self.type === 'MapPolygon') {
-            //     ctx.save();
-            //     ctx.beginPath();
-            //     ctx.lineWidth = 2;
-            //     ctx.strokeStyle = '#ff0000';
-            //     //ctx.translate(self.x, self.y);
-            //     //console.log(self.body);
-            //     ctx.translate(self.body.m_position.x, self.body.m_position.y);
-            //     ctx.moveTo(getVertice(0).x , getVertice(0).y);
-            //     //console.log('moved to', getVertice(0).x, getVertice(0).y);
-            //     //throw 'sefs'
-            //     //console.log(self.body);
-            //     //throw 'ssf'
-            //     ctx.lineTo(getVertice(1).x , getVertice(1).y)
-            //     ctx.lineTo(getVertice(2).x , getVertice(2).y)
-                
-            //     ctx.closePath();
-            //     ctx.stroke();
-            //     ctx.restore();
-            // }
         };
 
+        // Move Shape to x, y coordinates.
         this.setPos = function(x, y){
             self.x = x;
             self.y = y;
         };
 
+        // Abstract function for initializing physics on a Shape.
         this.initPhysics = function(){
             return undefined;
         };

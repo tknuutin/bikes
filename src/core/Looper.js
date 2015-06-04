@@ -1,4 +1,5 @@
 
+// The main game loop for physics and game logic ticks.
 define([], function(){
     var Looper = function(controller, worldManager, entityManager, renderer){
         var self = this;
@@ -27,6 +28,7 @@ define([], function(){
             
         };
 
+        // Main game tick (non box2d).
         this.tick = function(){
             controller.tick();
             renderer.render();

@@ -1,4 +1,5 @@
 
+// Manages the physical HTML page.
 define(['src/entities/EntityFinder'], function(EF){
     var PageManager = function(container){
         var self = this;
